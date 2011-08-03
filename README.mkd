@@ -1,0 +1,15 @@
+Python interface to the TVRage television information database.
+
+Installation
+------------
+
+You should install TVRage with pip:
+
+    pip install TVRage
+
+Otherwise, you'll have to download the package and run:
+
+    python setup.py install
+
+If you install it this way then you will also have to install all necessary
+dependencies manually.
