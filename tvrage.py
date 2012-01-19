@@ -4,10 +4,12 @@ from lxml import etree
 
 API_KEY = None
 
+
 def is_list(value):
     return isinstance(value, (tuple, list))
 
-class Element(object): #{{{1
+
+class Element(object):  # {{{1
 
     def __init__(self, e):
         super(Element, self).__init__()
@@ -16,7 +18,8 @@ class Element(object): #{{{1
     def set_attribute(self, name, f=None):
         value = self.e.get(name)
         try:
-            if f: value = f(value)
+            if f:
+                value = f(value)
         except TypeError:
             pass
         setattr(self, name, value)
@@ -24,7 +27,8 @@ class Element(object): #{{{1
     def set_element(self, name, f=None):
         try:
             value = self.e.find(name).text
-            if f: value = f(value)
+            if f:
+                value = f(value)
         except AttributeError:
             value = None
         setattr(self, name, value)
@@ -38,35 +42,40 @@ class Element(object): #{{{1
         data = {}
         for key in keys:
             f = None
-            if is_list(key): key, f = key
+            if is_list(key):
+                key, f = key
             value = e.find(key).text
-            if f: value = f(value)
+            if f:
+                value = f(value)
             data[key] = value
         setattr(self, name, data)
 
     def set_element_list(self, name, f=None):
         values = []
         for x in self.e.find(name):
-            v = x.text
-            if f: value = f(v)
-            values.append(v)
+            value = x.text
+            if f:
+                value = f(value)
+            values.append(value)
         setattr(self, name, values)
 
     def set_element_dict(self, name, key, fkey=None, fvalue=None):
         data = {}
         for x in self.e.find(name):
             k = x.get(key)
-            if fkey: k = fkey(k)
+            if fkey:
+                k = fkey(k)
             v = x.text
-            if fvalue: v = fvalue(v)
+            if fvalue:
+                v = fvalue(v)
             data[k] = v
         setattr(self, name, data)
 
 
+class TVRage(object):  # {{{1
 
-class TVRage(object): #{{{1
-
-    url = 'http://services.tvrage.com/myfeeds/{command}.php?key={api_key}&{parameters}'
+    url = 'http://services.tvrage.com/myfeeds/' + \
+          '{command}.php?key={api_key}&{parameters}'
 
     def __init__(self, api_key=None):
         super(TVRage, self).__init__()
@@ -110,8 +119,7 @@ class TVRage(object): #{{{1
         return CurrentShows(self.get_results('currentshows'))
 
 
-
-class Show(Element): #{{{1
+class Show(Element):  # {{{1
 
     def __init__(self, e):
         super(Show, self).__init__(e)
@@ -133,7 +141,8 @@ class Show(Element): #{{{1
     def __repr__(self):
         return self.name
 
-class ShowInfo(Element): #{{{1
+
+class ShowInfo(Element):  # {{{1
 
     def __init__(self, e):
         super(ShowInfo, self).__init__(e)
@@ -172,8 +181,7 @@ class ShowInfo(Element): #{{{1
         return self.showname
 
 
-
-class EpisodeList(Element): #{{{1
+class EpisodeList(Element):  # {{{1
 
     def __init__(self, e):
         super(EpisodeList, self).__init__(e)
@@ -184,7 +192,8 @@ class EpisodeList(Element): #{{{1
     def __repr__(self):
         return self.name
 
-class Season(Element): #{{{1
+
+class Season(Element):  # {{{1
 
     def __init__(self, e):
         super(Season, self).__init__(e)
@@ -194,7 +203,8 @@ class Season(Element): #{{{1
     def __repr__(self):
         return '{:02d}'.format(self.no)
 
-class Episode(Element): #{{{1
+
+class Episode(Element):  # {{{1
 
     def __init__(self, e):
         super(Episode, self).__init__(e)
@@ -221,8 +231,7 @@ class Episode(Element): #{{{1
         return '{:02d}'.format(self.seasonnum)
 
 
-
-class EpisodeInfo(Element): #{{{1
+class EpisodeInfo(Element):  # {{{1
 
     def __init__(self, e):
         super(EpisodeInfo, self).__init__(e)
@@ -254,8 +263,7 @@ class EpisodeInfo(Element): #{{{1
         return self.name
 
 
-
-class FullSchedule(Element): #{{{1
+class FullSchedule(Element):  # {{{1
 
     def __init__(self, e):
         super(FullSchedule, self).__init__(e)
@@ -264,7 +272,7 @@ class FullSchedule(Element): #{{{1
             for time in day:
                 times = {}
                 for show in time:
-                    t[show.get('name')] = {
+                    times[show.get('name')] = {
                             'network': show.find('network').text,
                             'title': show.find('title').text,
                             'ep': show.find('ep').text,
@@ -275,8 +283,7 @@ class FullSchedule(Element): #{{{1
                 self.dates[dt] = times
 
 
-
-class Countdown(Element): #{{{1
+class Countdown(Element):  # {{{1
 
     def __init__(self, e):
         super(Countdown, self).__init__(e)
@@ -293,7 +300,8 @@ class Countdown(Element): #{{{1
                             'link': ep.find('link').text,
                             'title': ep.find('title').text,
                             'epnum': ep.find('epnum').text,
-                            'airdate': self.parse_date(ep.find('airdate').text),
+                            'airdate': self.parse_date(
+                                ep.find('airdate').text),
                             'relativedate': ep.find('relativedate').text,
                             }
                         })
@@ -306,8 +314,7 @@ class Countdown(Element): #{{{1
             return None
 
 
-
-class CurrentShows(Element): #{{{1
+class CurrentShows(Element):  # {{{1
 
     def __init__(self, e):
         super(CurrentShows, self).__init__(e)
