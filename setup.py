@@ -4,7 +4,7 @@ from setuptools import setup
 
 setup(
         name='tvrage',
-        version='0.1.1',
+        version='0.1.2',
         description='Python interface to the TVRage television information database.',
         author='Jeremy Cantrell',
         author_email='jmcantrell@gmail.com',

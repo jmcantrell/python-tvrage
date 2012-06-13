@@ -74,8 +74,7 @@ class Element(object):  # {{{1
 
 class TVRage(object):  # {{{1
 
-    url = 'http://services.tvrage.com/myfeeds/' + \
-          '{command}.php?key={api_key}&{parameters}'
+    url = 'http://services.tvrage.com/myfeeds/{command}.php?key={api_key}&{parameters}'
 
     def __init__(self, api_key=None):
         super(TVRage, self).__init__()
@@ -328,5 +327,3 @@ class CurrentShows(Element):  # {{{1
                     'showlink': show.find('showlink').text,
                     })
             self.countries[country.get('name')] = shows
-
-#}}}1
